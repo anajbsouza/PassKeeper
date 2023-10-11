@@ -1,11 +1,12 @@
 import { userController } from '../controllers/userController';
 import { Router } from 'express';
+import { validateSchema } from '../middlewares/validation-middleware';
+import { userSchema } from '../schemas/userSchema';
 
 
 const usersRouter = Router();
 
-// Rota para registrar um novo usuário
-usersRouter.post('/register', userController.signUp);
-usersRouter.post('/login', userController.logIn);
+usersRouter.post('/register', validateSchema(userSchema),  userController.signUp);
+usersRouter.post('/login', validateSchema(userSchema), userController.logIn);
 
 export default usersRouter;
