@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Schema } from 'joi'; // Importe o tipo Schema do Joi
+import { Schema } from 'joi';
 
 export function validateSchema(schema: Schema) {
   return (req: Request, res: Response, next: NextFunction) => {

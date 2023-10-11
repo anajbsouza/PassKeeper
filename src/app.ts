@@ -1,7 +1,9 @@
 import express from 'express';
+import 'express-async-errors';
 import cors from 'cors';
 import userRouter from './routers/userRouter';
 import credentialRouter from './routers/credentialRouter';
+import { handleApplicationErrors } from './middlewares/error-handling-middleware';
 
 const app = express();
 
@@ -11,11 +13,6 @@ app
   .get('/health', (_req, res) => res.send('OK!'))
   .use(userRouter)
   .use(credentialRouter)
-
-// const port = process.env.PORT || 4003;
-
-// app.listen(port, () => {
-//   console.log(`Servidor rodando na porta ${port}`);
-// });
+  //.use(handleApplicationErrors)
 
 export default app;

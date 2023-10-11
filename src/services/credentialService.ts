@@ -7,6 +7,7 @@ const cryptr = new Cryptr(process.env.CRYPTO_SECRET);
 
 async function createCredential(credential: CreateCredential) {
   const { title, url, username, password, userId } = credential;
+  console.log('userId', userId);
   if (!title || !url || !username || !password || !userId) {
     throw validationError();
   }
