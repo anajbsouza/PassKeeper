@@ -7,11 +7,6 @@ async function signUp(req: Request, res: Response) {
   const user = await UserService.createUser(email, password);
   
   return res.status(httpStatus.CREATED).send(user);
-
-  // return res.status(httpStatus.CREATED).json({
-  //   id: user.id,
-  //   email: user.email,
-  // });
 }
 
 async function logIn(req: Request, res: Response) {

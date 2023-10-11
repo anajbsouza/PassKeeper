@@ -4,13 +4,12 @@ import { AuthenticatedRequest } from 'middlewares/authentication-middleware';
 import { credentialService } from '../services/credentialService';
 
 async function createCredential(req: AuthenticatedRequest, res: Response) {
-  try {
-    const credential = await credentialService.createCredential(req.body);
-    return res.status(httpStatus.CREATED).send(credential);
-  } catch (error) {
-    console.error('Error creating credential:', error);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error creating credential');
-  }
+  await credentialService.createCredential({
+    ...req.body,
+    userId: req.userId,
+  });
+  
+  return res.status(httpStatus.CREATED);
 }
 
 async function getCredentials(req: Request, res: Response) {
