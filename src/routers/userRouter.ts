@@ -1,13 +1,11 @@
-import express from 'express';
-import cors from 'cors';
+import { userController } from '../controllers/userController';
+import { Router } from 'express';
 
-const app = express();
 
-app
-    .use(cors())
-    .use(express.json())
-    .get('/health', (_req, res) => res.send('OK!'))
-    .use('/api/users', userRouter)
-    .use('/api/credentials', credentialRouter)
+const usersRouter = Router();
 
-export default app;
+// Rota para registrar um novo usuário
+usersRouter.post('/register', userController.signUp);
+usersRouter.post('/login', userController.logIn);
+
+export default usersRouter;
