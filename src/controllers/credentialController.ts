@@ -4,13 +4,19 @@ import { AuthenticatedRequest } from 'middlewares/authentication-middleware';
 import { credentialService } from '../services/credentialService';
 
 async function createCredential(req: AuthenticatedRequest, res: Response) {
-  await credentialService.createCredential({
+  console.log('Token:', req.header('Authorization')); 
+  console.log('UserId:', req.userId); 
+
+  const { userId } = req;
+
+  const credential = await credentialService.createCredential({
     ...req.body,
-    userId: req.userId,
+    userId,
   });
-  
-  return res.status(httpStatus.CREATED);
+
+  return res.status(httpStatus.CREATED).send(credential);
 }
+
 
 async function getCredentials(req: Request, res: Response) {
   const credentials = await credentialService.getCredentials();

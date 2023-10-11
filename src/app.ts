@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import userRouter from './routers/userRouter';
@@ -10,9 +10,10 @@ const app = express();
 app
   .use(cors())
   .use(express.json())
-  .get('/health', (_req, res) => res.send('OK!'))
+  .get('/health', (_req: Request, res: Response) => res.send('OK!'))
   .use(userRouter)
   .use(credentialRouter)
-  //.use(handleApplicationErrors)
+  // @ts-ignore
+  .use(handleApplicationErrors)
 
 export default app;
