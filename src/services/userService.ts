@@ -2,13 +2,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '@prisma/client';
 import { userRepository } from '../repositories/userRepository';
-import { notFoundError, unauthorizedError, validationError } from '../errors/errors';
+import { duplicatedEmailError, notFoundError, unauthorizedError, validationError } from '../errors/errors';
 
 export async function createUser(email: string, password: string): Promise<User> {
   const existingUser = await userRepository.findByEmail(email);
 
   if (existingUser) {
-    throw validationError();
+    throw duplicatedEmailError();
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

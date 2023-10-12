@@ -18,15 +18,17 @@ async function createCredential(req: AuthenticatedRequest, res: Response) {
 }
 
 
-async function getCredentials(req: Request, res: Response) {
-  const credentials = await credentialService.getCredentials();
+async function getCredentials(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const credentials = await credentialService.getCredentials(userId);
   console.log('Controller de Credentials: ', credentials);
   return res.status(httpStatus.OK).send(credentials);
 }
 
-async function getCredentialById(req: Request, res: Response) {
+async function getCredentialById(req: AuthenticatedRequest, res: Response) {
   const { id } = req.params;
-  const credential = await credentialService.getCredentialById(Number(id));
+  const { userId } = req;
+  const credential = await credentialService.getCredentialById(Number(id), userId);
   return res.status(httpStatus.OK).send(credential);
 }
 

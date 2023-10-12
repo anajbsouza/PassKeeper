@@ -21,13 +21,15 @@ async function findByTitle(title: string) {
     })
 }
 
-async function findAll() {
-    return prisma.credential.findMany();
+async function findAll(userId: number) {
+    return prisma.credential.findMany({
+        where: { userId }
+    });
 }
 
-async function findById(id: number) {
+async function findById(id: number, userId: number) {
     return prisma.credential.findFirst({
-        where: { id }
+        where: { id, userId }
     })
 }
 
