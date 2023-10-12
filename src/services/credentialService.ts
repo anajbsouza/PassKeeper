@@ -27,8 +27,14 @@ async function createCredential(credential: CreateCredential) {
 
 async function getCredentials() {
   const credentials = await credentialRepository.findAll();
+  console.log('Service de Credentials:', credentials);
   if (!credentials || credentials.length === 0) throw notFoundError();
-  return credentials;
+  const credentialsWithDecryptedPassword = credentials.map((credential) => {
+		const { password } = credential;
+		const decryptedPassword = cryptr.decrypt(password);
+		return { ...credential, password: decryptedPassword };
+	});
+  return credentialsWithDecryptedPassword;
 }
 
 async function getCredentialById(id: number) {
@@ -43,14 +49,9 @@ async function deleteCredential(id: number) {
   await credentialRepository.deleteCredential(id);
 }
 
-function decryptPassword(encryptedPassword: string): string {
-  return cryptr.decrypt(encryptedPassword);
-}
-
 export const credentialService = {
   createCredential,
   getCredentials,
   getCredentialById,
   deleteCredential,
-  decryptPassword,
 };

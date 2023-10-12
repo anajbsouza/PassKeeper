@@ -20,6 +20,7 @@ async function createCredential(req: AuthenticatedRequest, res: Response) {
 
 async function getCredentials(req: Request, res: Response) {
   const credentials = await credentialService.getCredentials();
+  console.log('Controller de Credentials: ', credentials);
   return res.status(httpStatus.OK).send(credentials);
 }
 
