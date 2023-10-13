@@ -32,9 +32,10 @@ async function getCredentialById(req: AuthenticatedRequest, res: Response) {
   return res.status(httpStatus.OK).send(credential);
 }
 
-async function deleteCredential(req: Request, res: Response) {
+async function deleteCredential(req: AuthenticatedRequest, res: Response) {
   const { id } = req.params;
-  await credentialService.deleteCredential(Number(id));
+  const { userId } = req;
+  await credentialService.deleteCredential(Number(id), userId);
   return res.sendStatus(httpStatus.NO_CONTENT);
 }
 

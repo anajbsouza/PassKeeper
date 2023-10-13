@@ -53,10 +53,14 @@ async function getCredentialById(id: number, userId: number) {
   return newCredential;
 }
 
-async function deleteCredential(id: number) {
-  const credential = await credentialRepository.deleteCredential(id);
-  if (!credential) throw notFoundError();
-  await credentialRepository.deleteCredential(id);
+async function deleteCredential(id: number, userId: number) {
+  if (!userId) throw unauthorizedError();
+  console.log('usuário errado')
+
+  const credential = await credentialRepository.deleteCredential(id, userId);
+  console.log('credential: ', credential);
+  if (!credential) throw unauthorizedError();
+  return credential;
 }
 
 export const credentialService = {

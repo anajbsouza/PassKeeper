@@ -6,13 +6,12 @@ import { createUser } from "../factories/userFactory";
 import { faker } from "@faker-js/faker";
 
 beforeEach(async () => {
-    // await prisma.credential.deleteMany({});
     await prisma.user.deleteMany({});
 });
 
 const server = supertest(app);
 
-describe('POST /register', () => {
+describe('User creation and authentication', () => {
     describe('/register', () => {
         it('should respond with status 400 if email and/or password is invalid ', async () => {
             const response = await server.post('/register');
