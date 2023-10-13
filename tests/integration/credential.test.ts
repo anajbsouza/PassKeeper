@@ -67,7 +67,7 @@ describe('Credentials', () => {
         });
 
         it('should respond with 201 when credential is created', async () => {
-            //const token = await generateValidToken();
+            const token = await generateValidToken();
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -76,7 +76,7 @@ describe('Credentials', () => {
             };
             const response = await server
                 .post('/credentials')
-                // .set('Authorization', `Bearer ${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(credential);
 
             expect(response.status).toBe(httpStatus.CREATED);
@@ -102,9 +102,9 @@ describe('Credentials', () => {
                 .set('Authorization', `Bearer ${token}`)
                 .send(credential);
             
-                const response = await server
-            .get('/credentials')
-            .set('Authorization', `Bearer ${token}`);
+            const response = await server
+                .get('/credentials')
+                .set('Authorization', `Bearer ${token}`);
 
             expect(response.status).toBe(httpStatus.OK);
         });
@@ -139,34 +139,18 @@ describe('Credentials', () => {
             expect(response.status).toBe(httpStatus.OK);
         });
 
-        it('', async () => {
-            
-        });
-
-        it('', async () => {
-            
-        });
-
-        it('', async () => {
+        it('should respond with status 401 when user does not own the credential', async () => {
             
         });
     });
 
     describe('DELETE /credentials/:id', () => {
 
-        it('', async () => {
+        it('should responde with status 204 when deleting credential sucessfully', async () => {
             
         });
 
-        it('', async () => {
-            
-        });
-
-        it('', async () => {
-            
-        });
-
-        it('', async () => {
+        it('should respond with status 401 when user does not own the credential', async () => {
             
         });
     });
