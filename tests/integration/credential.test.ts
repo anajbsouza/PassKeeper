@@ -13,6 +13,7 @@ beforeEach(async () => {
 });
 
 export async function generateValidToken(user?: User) {
+    console.log("user valid token", user)
     const userId = user?.id || 1; 
     const token = jwt.sign({ userId }, process.env.JWT_SECRET);
 
@@ -41,13 +42,14 @@ describe('Credentials', () => {
 
         it('should respond with 400 if title already exists', async () => {
             const user = {
-                id: 1,
                 email: 'email@email.com',
                 password: '1234567890'
             }
-            const token = await generateValidToken(user);
-            await server.post('/register').send({id: user.id, email: user.email, password: user.password});
-            await server.post('/login').send({id: user.id, email: user.email, password: user.password});
+            
+            const userResponse = await server.post('/register').send({email: user.email, password: user.password});
+            await server.post('/login').send({email: user.email, password: user.password});
+            const token = await generateValidToken(userResponse.body);
+            console.log("userResponse.body", userResponse.body)
             const credential = {
                 title: 'Titulo Igual',
                 url: faker.internet.url(),
@@ -64,7 +66,7 @@ describe('Credentials', () => {
                 .set('Authorization', `Bearer ${token}`)
                 .send(credential);
 
-            console.log(response.body);
+                console.log("response", response.body)
             expect(response.status).toBe(httpStatus.BAD_REQUEST);
         });
 
@@ -76,6 +78,7 @@ describe('Credentials', () => {
             await server.post('/register').send({email: user.email, password: user.password});
             await server.post('/login').send({email: user.email, password: user.password});
             const token = await generateValidToken();
+            console.log('token', token);
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
