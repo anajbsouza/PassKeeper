@@ -7,8 +7,7 @@ const cryptr = new Cryptr(process.env.CRYPTO_SECRET);
 
 async function createCredential(credential: CreateCredential) {
   const { title, url, username, password, userId } = credential;
-  console.log('Credential: ', credential);
-  console.log('userId', userId);
+
   if (!title || !url || !username || !password || !userId) {
     throw validationError();
   }
@@ -29,8 +28,7 @@ async function getCredentials(userId: number) {
   if (!userId) {
     throw unauthorizedError();
   }
-  const credentials = await credentialRepository.findAll(userId);
-  console.log('Service de Credentials:', credentials);
+  const credentials = await credentialRepository.findAll(userId)
   if (!credentials || credentials.length === 0) throw notFoundError();
   
   const credentialsWithDecryptedPassword = credentials.map((credential) => {

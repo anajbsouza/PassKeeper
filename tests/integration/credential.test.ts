@@ -8,8 +8,8 @@ import { createUser } from "../factories/userFactory";
 import * as jwt from 'jsonwebtoken';
 
 beforeEach(async () => {
-    await prisma.user.deleteMany({});
     await prisma.credential.deleteMany({});
+    await prisma.user.deleteMany({});
 });
 
 export async function generateValidToken(user?: User) {

@@ -13,7 +13,7 @@ async function logIn(req: Request, res: Response) {
   const { email, password } = req.body;
   const token = await UserService.loginUser(email, password);
 
-  return res.status(httpStatus.OK).json({ token });
+  return res.status(httpStatus.OK).send({ token });
 }
 
 export const userController = {

@@ -7,9 +7,7 @@ import { duplicatedEmailError, notFoundError, unauthorizedError, validationError
 export async function createUser(email: string, password: string): Promise<User> {
   const existingUser = await userRepository.findByEmail(email);
 
-  if (existingUser) {
-    throw duplicatedEmailError();
-  }
+  if (existingUser) throw duplicatedEmailError();
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await userRepository.create(email, hashedPassword);
@@ -20,15 +18,11 @@ export async function createUser(email: string, password: string): Promise<User>
 export async function loginUser(email: string, password: string): Promise<string> {
   const user = await userRepository.findByEmail(email);
 
-  if (!user) {
-    throw notFoundError();
-  }
+  if (!user) throw notFoundError();
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
-  if (!passwordMatch) {
-    throw unauthorizedError();
-  }
+  if (!passwordMatch) throw unauthorizedError();
 
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
     expiresIn: '1h',
