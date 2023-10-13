@@ -42,7 +42,7 @@ describe('Credentials', () => {
         it('should respond with 400 if title already exists', async () => {
             const token = await generateValidToken();
             const credential1 = {
-                title: 'Titulo',
+                title: 'Titulo Igual',
                 url: faker.internet.url(),
                 username: faker.internet.userName(),
                 password: faker.internet.password(),
@@ -51,13 +51,14 @@ describe('Credentials', () => {
                 .post('/credentials')
                 .set('Authorization', `Bearer ${token}`)
                 .send(credential1);
-            
+
             const credential2 = {
-                title: 'Titulo',
+                title: 'Titulo Igual',
                 url: faker.internet.url(),
                 username: faker.internet.userName(),
                 password: faker.internet.password(),
             };
+
             const response = await server
                 .post('/credentials')
                 .set('Authorization', `Bearer ${token}`)
@@ -67,7 +68,20 @@ describe('Credentials', () => {
         });
 
         it('should respond with 201 when credential is created', async () => {
-            const token = await generateValidToken();
+            const user = {
+                email: faker.internet.email(),
+                password: faker.internet.password(),
+            }
+            await server
+                .post('/register')
+                .send(user);
+            const createdUser = await createUser(user.email, user.password);
+            
+            await server
+                .post('/login')
+                .send(user);
+            const token = await generateValidToken(createdUser);
+
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -147,7 +161,23 @@ describe('Credentials', () => {
     describe('DELETE /credentials/:id', () => {
 
         it('should responde with status 204 when deleting credential sucessfully', async () => {
-            
+            const token = await generateValidToken();
+            const credential = {
+                title: faker.lorem.word(),
+                url: faker.internet.url(),
+                username: faker.internet.userName(),
+                password: faker.internet.password(),
+            };
+            const createdCredential = await server
+                .post('/credentials')
+                .set('Authorization', `Bearer ${token}`)
+                .send(credential);
+
+            const response = await server
+                .delete(`/credentials/${createdCredential.body.id}`)
+                .set('Authorization', `Bearer ${token}`);
+
+            expect(response.status).toBe(httpStatus.NO_CONTENT);
         });
 
         it('should respond with status 401 when user does not own the credential', async () => {

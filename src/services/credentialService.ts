@@ -55,11 +55,13 @@ async function getCredentialById(id: number, userId: number) {
 
 async function deleteCredential(id: number, userId: number) {
   if (!userId) throw unauthorizedError();
-  console.log('usuário errado')
 
   const credential = await credentialRepository.deleteCredential(id, userId);
-  console.log('credential: ', credential);
-  if (!credential) throw unauthorizedError();
+  if (!credential) throw notFoundError();
+  
+  if (credential.userId !== userId) throw unauthorizedError();
+  
+  await credentialRepository.deleteCredential(id, userId);
   return credential;
 }
 
