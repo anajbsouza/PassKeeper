@@ -3,12 +3,12 @@ import prisma from "../../src/database";
 import httpStatus from "http-status";
 import supertest from "supertest";
 import { faker } from "@faker-js/faker";
-import { createCredential } from "../factories/credentialFactory";
 import { User } from "@prisma/client";
-import { createUser } from "services/userService";
+import { createUser } from "../factories/userFactory";
 import * as jwt from 'jsonwebtoken';
 
 beforeEach(async () => {
+    await prisma.user.deleteMany({});
     await prisma.credential.deleteMany({});
 });
 
@@ -41,7 +41,8 @@ describe('Credentials', () => {
 
         it('should respond with 400 if title already exists', async () => {
             const token = await generateValidToken();
-            const credential1 = {
+
+            const credential = {
                 title: 'Titulo Igual',
                 url: faker.internet.url(),
                 username: faker.internet.userName(),
@@ -50,38 +51,24 @@ describe('Credentials', () => {
             await server
                 .post('/credentials')
                 .set('Authorization', `Bearer ${token}`)
-                .send(credential1);
+                .send(credential);
 
-            const credential2 = {
-                title: 'Titulo Igual',
-                url: faker.internet.url(),
-                username: faker.internet.userName(),
-                password: faker.internet.password(),
-            };
-
-            const response = await server
+                const response = await server
                 .post('/credentials')
                 .set('Authorization', `Bearer ${token}`)
-                .send(credential2);
+                .send(credential);
 
             expect(response.status).toBe(httpStatus.BAD_REQUEST);
         });
 
         it('should respond with 201 when credential is created', async () => {
             const user = {
-                email: faker.internet.email(),
-                password: faker.internet.password(),
+                email: 'certo@email.com',
+                password: faker.internet.password({length: 10}),
             }
-            await server
-                .post('/register')
-                .send(user);
-            const createdUser = await createUser(user.email, user.password);
-            
-            await server
-                .post('/login')
-                .send(user);
-            const token = await generateValidToken(createdUser);
-
+            await server.post('/register').send({email: user.email, password: user.password});
+            await server.post('/login').send({email: user.email, password: user.password});
+            const token = await generateValidToken();
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -104,7 +91,8 @@ describe('Credentials', () => {
         });
 
         it('should respond with status 200 if can get user credentials', async () => {
-            const token = await generateValidToken();
+            const user = await createUser();
+            const token = await generateValidToken(user);
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),

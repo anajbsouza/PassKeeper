@@ -33,9 +33,9 @@ async function findById(id: number, userId: number) {
     })
 }
 
-async function deleteCredential(id: number, userId: number) {
+async function deleteCredential(id: number) {
     return prisma.credential.delete({
-        where: { id, userId }
+        where: { id }
     })
 }
 

@@ -42,7 +42,7 @@ async function getCredentials(userId: number) {
 }
 
 async function getCredentialById(id: number, userId: number) {
-  if (!userId) throw notFoundError();
+  if (!userId) throw unauthorizedError();
   
   const credential = await credentialRepository.findById(id, userId);
   if (!credential) throw unauthorizedError();
@@ -56,12 +56,12 @@ async function getCredentialById(id: number, userId: number) {
 async function deleteCredential(id: number, userId: number) {
   if (!userId) throw unauthorizedError();
 
-  const credential = await credentialRepository.deleteCredential(id, userId);
-  if (!credential) throw notFoundError();
+  const credential = await credentialRepository.findById(id, userId);
+  if (!credential) throw unauthorizedError();
   
   if (credential.userId !== userId) throw unauthorizedError();
   
-  await credentialRepository.deleteCredential(id, userId);
+  await credentialRepository.deleteCredential(id);
   return credential;
 }
 
