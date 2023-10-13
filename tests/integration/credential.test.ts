@@ -49,7 +49,7 @@ describe('Credentials', () => {
             const userResponse = await server.post('/register').send({email: user.email, password: user.password});
             await server.post('/login').send({email: user.email, password: user.password});
             const token = await generateValidToken(userResponse.body);
-            console.log("userResponse.body", userResponse.body)
+
             const credential = {
                 title: 'Titulo Igual',
                 url: faker.internet.url(),
@@ -75,10 +75,10 @@ describe('Credentials', () => {
                 email: 'certo@email.com',
                 password: faker.internet.password({length: 10}),
             }
-            await server.post('/register').send({email: user.email, password: user.password});
+            const userResponse = await server.post('/register').send({email: user.email, password: user.password});
             await server.post('/login').send({email: user.email, password: user.password});
-            const token = await generateValidToken();
-            console.log('token', token);
+            const token = await generateValidToken(userResponse.body);
+
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -101,8 +101,14 @@ describe('Credentials', () => {
         });
 
         it('should respond with status 200 if can get user credentials', async () => {
-            const user = await createUser();
-            const token = await generateValidToken(user);
+            const user = {
+                email: 'certo@email.com',
+                password: faker.internet.password({length: 10}),
+            }
+            const userResponse = await server.post('/register').send({email: user.email, password: user.password});
+            await server.post('/login').send({email: user.email, password: user.password});
+            const token = await generateValidToken(userResponse.body);
+
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -127,12 +133,13 @@ describe('Credentials', () => {
 
         it('should responde with status 200 when getting credential sucessfully', async () => {
             const user = {
-                email: faker.internet.email(),
-                password: faker.internet.password(),
+                email: 'certo@email.com',
+                password: faker.internet.password({length: 10}),
             }
-            await server.post('/users').send({email: user.email, password: user.password});
-            const createdUser = await prisma.user.findFirst({where: {email: user.email}});
-            const token = await generateValidToken(createdUser);
+            const userResponse = await server.post('/register').send({email: user.email, password: user.password});
+            await server.post('/login').send({email: user.email, password: user.password});
+            const token = await generateValidToken(userResponse.body);
+            
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
@@ -152,14 +159,53 @@ describe('Credentials', () => {
         });
 
         it('should respond with status 401 when user does not own the credential', async () => {
-            
+            const user1 = {
+                email: 'user1@email.com',
+                password: faker.internet.password({ length: 10 }),
+            };
+            const user1Response = await server.post('/register').send(user1);
+            await server.post('/login').send(user1);
+
+            const user2 = {
+                email: 'user2@email.com',
+                password: faker.internet.password({ length: 10 }),
+            };
+            const user2Response = await server.post('/register').send(user2);
+            await server.post('/login').send(user2);
+
+            const token1 = await generateValidToken(user1Response.body);
+            const credential = {
+                title: faker.lorem.word(),
+                url: faker.internet.url(),
+                username: faker.internet.userName(),
+                password: faker.internet.password(),
+            };
+            const createdCredential = await server
+                .post('/credentials')
+                .set('Authorization', `Bearer ${token1}`)
+                .send(credential);
+
+            const token2 = await generateValidToken(user2Response.body);
+            const response = await server
+                .get(`/credentials/${createdCredential.body.id}`)
+                .set('Authorization', `Bearer ${token2}`);
+
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
         });
+        
     });
 
     describe('DELETE /credentials/:id', () => {
 
         it('should responde with status 204 when deleting credential sucessfully', async () => {
-            const token = await generateValidToken();
+            const user = {
+                email: 'certo@email.com',
+                password: faker.internet.password({length: 10}),
+            }
+            const userResponse = await server.post('/register').send({email: user.email, password: user.password});
+            await server.post('/login').send({email: user.email, password: user.password});
+            const token = await generateValidToken(userResponse.body);
+
             const credential = {
                 title: faker.lorem.word(),
                 url: faker.internet.url(),
