@@ -225,7 +225,40 @@ describe('Credentials', () => {
         });
 
         it('should respond with status 401 when user does not own the credential', async () => {
+            const user1 = {
+                email: 'user1@email.com',
+                password: faker.internet.password({ length: 10 }),
+            };
+            const user1Response = await server.post('/register').send(user1);
+            await server.post('/login').send(user1);
+
+            const token1 = await generateValidToken(user1Response.body);
+            const credential = {
+                title: faker.lorem.word(),
+                url: faker.internet.url(),
+                username: faker.internet.userName(),
+                password: faker.internet.password(),
+            };
+
+            const createdCredential = await server
+                .post('/credentials')
+                .set('Authorization', `Bearer ${token1}`)
+                .send(credential);
+
+            const user2 = {
+                email: 'user2@email.com',
+                password: faker.internet.password({ length: 10 }),
+            };
+            const user2Response = await server.post('/register').send(user2);
+            await server.post('/login').send(user2);
             
+            
+            const token2 = await generateValidToken(user2Response.body);
+            const response = await server
+                .delete(`/credentials/${createdCredential.body.id}`)
+                .set('Authorization', `Bearer ${token2}`);
+
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
         });
     });
 });
