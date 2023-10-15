@@ -11,7 +11,7 @@
     "migration:run": "prisma migrate dev",
     "start": "npm run migration:run && node dist/index.js",
     "test:load-envs": "dotenv -e .env.test --runInBand",
-    "test:coverage": "npm run test:load-envs jest -- --coverage --runInBand",
+    "test:coverage": "npm run test:load-envs -- jest -- --coverage --runInBand",
     "test:migration:run": "npm run test:load-envs prisma migrate deploy",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "dev": "cross-env NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts"

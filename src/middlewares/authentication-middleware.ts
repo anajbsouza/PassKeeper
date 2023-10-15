@@ -8,7 +8,7 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
   if (!authHeader) throw unauthorizedError();
 
   const token = authHeader.split(' ')[1];
-  if (!token) throw unauthorizedError();
+  //if (!token) throw unauthorizedError();
 
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as JWTPayload;

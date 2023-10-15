@@ -25,9 +25,9 @@ async function createCredential(credential: CreateCredential) {
 }
 
 async function getCredentials(userId: number) {
-  if (!userId) {
-    throw unauthorizedError();
-  }
+  // if (!userId) {
+  //   throw unauthorizedError();
+  // }
   const credentials = await credentialRepository.findAll(userId)
   if (!credentials || credentials.length === 0) throw notFoundError();
   
@@ -40,7 +40,7 @@ async function getCredentials(userId: number) {
 }
 
 async function getCredentialById(id: number, userId: number) {
-  if (!userId) throw unauthorizedError();
+  // if (!userId) throw unauthorizedError();
   
   const credential = await credentialRepository.findById(id, userId);
   if (!credential) throw unauthorizedError();
@@ -52,7 +52,7 @@ async function getCredentialById(id: number, userId: number) {
 }
 
 async function deleteCredential(id: number, userId: number) {
-  if (!userId) throw unauthorizedError();
+  // if (!userId) throw unauthorizedError();
 
   const credential = await credentialRepository.findById(id, userId);
   if (!credential) throw unauthorizedError();

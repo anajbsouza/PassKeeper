@@ -28,9 +28,7 @@ export function handleApplicationErrors(
                 message: err.message,
             });
         }
-        
-        
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-            message: err.message,
-        });
+        // return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        //     message: err.message,
+        // });
     }
