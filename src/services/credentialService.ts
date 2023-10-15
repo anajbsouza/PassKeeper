@@ -29,7 +29,7 @@ async function getCredentials(userId: number) {
   //   throw unauthorizedError();
   // }
   const credentials = await credentialRepository.findAll(userId)
-  if (!credentials || credentials.length === 0) throw notFoundError();
+  //if (!credentials || credentials.length === 0) throw notFoundError();
   
   const credentialsWithDecryptedPassword = credentials.map((credential) => {
 		const { password } = credential;
