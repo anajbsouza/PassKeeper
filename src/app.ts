@@ -13,7 +13,6 @@ app
   .get('/health', (_req: Request, res: Response) => res.send('OK!'))
   .use(userRouter)
   .use(credentialRouter)
-  // @ts-ignore
   .use(handleApplicationErrors)
 
 export default app;
