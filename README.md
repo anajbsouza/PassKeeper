@@ -1,6 +1,6 @@
-# DrivenPass - Gerenciador de Senhas
+# PassKeeper - Gerenciador de Senhas
 
-O DrivenPass é uma aplicação de back-end para o gerenciamento de senhas de sites e aplicativos desenvolvidas em Node. Ela funciona através de requisições HTTP(s) seguindo a convenção REST.
+PassKeeper é uma aplicação de back-end para o gerenciamento de senhas de sites e aplicativos desenvolvidas em Node. Ela funciona através de requisições HTTP(s) seguindo a convenção REST.
 
 # Como funciona?
 
