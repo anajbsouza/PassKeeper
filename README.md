@@ -1,62 +1,62 @@
-# PassKeeper - Gerenciador de Senhas
+# PassKeeper - Password Manager
 
-PassKeeper é uma aplicação de back-end para o gerenciamento de senhas de sites e aplicativos desenvolvidas em Node. Ela funciona através de requisições HTTP(s) seguindo a convenção REST.
+PassKeeper is a back-end application for managing website and app passwords, developed in Node. It operates via HTTP(s) requests following the REST convention.
 
-# Como funciona?
+# How does it work?
 
-A API oferece diferentes endpoints para lidar com credenciais e usuários:
+The API provides various endpoints for handling credentials and users:
 
-## Endpoints de Credenciais (/credentials)
+## Credential Endpoints (/credentials)
 
-**- POST /credentials**: Cria uma nova credencial. Requer autenticação do token do usuário e validação do esquema da credencial antes de criar a mesma.
+**- POST /credentials**: Creates a new credential. Requires user token authentication and credential schema validation before creation.
 
-**- GET /credentials**: Retorna todas as credenciais. Requer autenticação do token do usuário.
+**- GET /credentials**: Returns all credentials. Requires user token authentication.
 
-**- GET /credentials/:id**: Retorna uma credencial específica com base no seu ID. Requer autenticação do token do usuário.
+**- GET /credentials/:id**: Returns a specific credential based on its ID. Requires user token authentication.
 
-**- DELETE /credentials/:id**: Remove uma credencial com base no seu ID. Requer autenticação do token do usuário.
+**- DELETE /credentials/:id**: Deletes a credential based on its ID. Requires user token authentication.
 
-## Endpoints de Usuários (/users)
+## User Endpoints (/users)
 
-**- POST /register**: Registra um novo usuário. Requer validação do esquema do usuário antes de se registrar.
+**- POST /register**: Registers a new user. Requires user schema validation before registration.
 
-**- POST /login**: Realiza o login do usuário. Requer validação do esquema do usuário antes de realizar o login.
+**- POST /login**: Logs in the user. Requires user schema validation before login.
 
-# Motivação
+# Motivation
 
-Este projeto foi desenvolvido com o objetivo de praticar a construção de uma API REST utilizando Node, Express, TypeScript, Prisma. Também criei testes de integração automatizados utilizando Jest e Supertest.
+This project was developed with the goal of practicing building a REST API using Node, Express, TypeScript, and Prisma. I also created automated integration tests using Jest and Supertest.
 
-# Tecnologias Utilizadas
+# Technologies Used
 
-Para este projeto foram utilizadas as seguintes tecnologias:
+The following technologies were used for this project:
 
-Node (versão 18.17.0)
-Express
-TypeScript
-Prisma
-Postgres
-Jest e Supertest
-Joi
-http-status
-Bcrypt
-Faker
-jsonwebtoken
-Nodemon
+- Node (version 18.17.0)
+- Express
+- TypeScript
+- Prisma
+- Postgres
+- Jest and Supertest
+- Joi
+- http-status
+- Bcrypt
+- Faker
+- jsonwebtoken
+- Nodemon
 
-Executando o Projeto em Desenvolvimento
 
-Para rodar este projeto em desenvolvimento, siga os passos abaixo:
+# Running the Project in Development
 
-- Clone este repositório.
-- Instale as dependências necessárias com o comando: npm install.
-- Crie o arquivo .env baseado no .env.example.
-- Para executar os testes, será necessário criar outro arquivo .env.test baseado no .env.example.
-- No arquivo .env, insira as seguintes propriedades:
+To run this project in development, follow these steps:
+
+- Clone this repository.
+- Install the necessary dependencies using the command: npm install.
+- Create a .env file based on the .env.example.
+- For running the tests, create another .env.test file based on the .env.example.
+- In the .env file, insert the following properties:
 
 ```DATABASE_URL="postgresql://postgres..."```
 
-
-- A propriedade DATABASE_URL é utilizada para a conexão com o banco de dados.
-- Execute o Prisma para criar o banco de dados e as tabelas necessárias usando o comando: npx prisma migrate dev.
-- Para iniciar o projeto em modo de desenvolvimento, use o comando npm run dev.
-- Testes manuais podem ser realizados utilizando o Thunder Client.
+- The DATABASE_URL property is used for database connection.
+- Run Prisma to create the database and the required tables using the command: npx prisma migrate dev.
+- To start the project in development mode, use the command: npm run dev.
+- Manual tests can be performed using Thunder Client.
